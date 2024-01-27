@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-
-enum WeekDay { short, long }
-
-enum SelectedDayPosition { left, right, center }
-
-enum FullCalendarScroll { horizontal, vertical }
+import 'package:calendar_slider/src/types.dart';
 
 class FullCalendar extends StatefulWidget {
   final DateTime startDate;

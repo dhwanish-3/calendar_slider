@@ -5,11 +5,12 @@ export 'package:intl/date_symbol_data_local.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 export 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'full_calendar.dart';
+import 'types.dart';
 
-class CalendarAgendaController {
-  CalendarAgendaState? state;
+class CalendarSliderController {
+  CalendarSliderState? state;
 
-  void bindState(CalendarAgendaState state) {
+  void bindState(CalendarSliderState state) {
     this.state = state;
   }
 
@@ -22,8 +23,8 @@ class CalendarAgendaController {
   }
 }
 
-class CalendarAgenda extends StatefulWidget implements PreferredSizeWidget {
-  final CalendarAgendaController? controller;
+class CalendarSlider extends StatefulWidget implements PreferredSizeWidget {
+  final CalendarSliderController? controller;
 
   final DateTime initialDate;
   final DateTime firstDate;
@@ -31,9 +32,9 @@ class CalendarAgenda extends StatefulWidget implements PreferredSizeWidget {
   final Function onDateSelected;
 
   final double selectedHeight;
-  double? selectedWidth;
+  late final double? selectedWidth;
   final double unSelectedHeight;
-  double? unSelectedWidth;
+  late final double? unSelectedWidth;
 
   final Color? backgroundColor;
   final SelectedDayPosition selectedDayPosition;
@@ -58,7 +59,7 @@ class CalendarAgenda extends StatefulWidget implements PreferredSizeWidget {
   final double leftMargin;
   final List<DateTime>? events;
 
-  CalendarAgenda({
+  CalendarSlider({
     Key? key,
     required this.initialDate,
     required this.firstDate,
@@ -103,13 +104,13 @@ class CalendarAgenda extends StatefulWidget implements PreferredSizeWidget {
         super(key: key);
 
   @override
-  CalendarAgendaState createState() => CalendarAgendaState();
+  CalendarSliderState createState() => CalendarSliderState();
 
   @override
   Size get preferredSize => const Size.fromHeight(250.0);
 }
 
-class CalendarAgendaState extends State<CalendarAgenda>
+class CalendarSliderState extends State<CalendarSlider>
     with TickerProviderStateMixin {
   final ItemScrollController _scrollController = ItemScrollController();
 
@@ -476,7 +477,7 @@ class CalendarAgendaState extends State<CalendarAgenda>
 
   _initCalendar() {
     if (widget.controller != null &&
-        widget.controller is CalendarAgendaController) {
+        widget.controller is CalendarSliderController) {
       widget.controller!.bindState(this);
     }
     _selectedDate = widget.initialDate;
