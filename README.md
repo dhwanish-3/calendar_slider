@@ -1,39 +1,91 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+**CalendarSllider widget with a lot of customization**
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+<p align="left">
+<a href="https://github.com/dhwanish-3/calendar_slider"></a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
+</p>
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+# Getting Started
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
+1. Depend on it
+Add it to your package's pubspec.yaml file
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  calendar_slider: version
+```
+2. Install it
+Install packages from the command line
+```sh
+flutter pub get calendar_slider
+```
+3. Import it
+Import it to your project
 ```dart
-const like = 'sample';
+import 'package:calendar_slider/calendar_slider.dart';
 ```
 
-## Additional information
+ SelectedDayPosition.center         |  SelectedDayPosition.Left      | SelectedDayPosition.Right
+:-------------------------:|:-------------------------:|:-------------------------:
+![](https://github.com/sud0su/calendar_agenda/blob/main/assets/selectedDayCenter.png?raw=true) | ![](https://github.com/sud0su/calendar_agenda/blob/main/assets/selectedDayLeft.png?raw=true) | ![](https://github.com/sud0su/calendar_agenda/blob/main/assets/selectedDayRight.png?raw=true)
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+ FullCalendarScroll.vertical         |  FullCalendarScroll.horizontal
+:-------------------------:|:-------------------------:
+![](https://github.com/sud0su/calendar_agenda/blob/main/assets/FullCalendarScrollVertical.png?raw=true) | ![](https://github.com/sud0su/calendar_agenda/blob/main/assets/FullCalendarScrollHorizontal.png?raw=true)
+
+
+### Demo
+
+![](https://github.com/sud0su/calendar_agenda/blob/main/assets/demo.gif?raw=true)
+
+# How to use?
+
+Use the **CalendarAgenda** Widget
+```dart
+CalendarAgenda(
+initialDate: DateTime.now(),
+firstDate: DateTime.now().subtract(Duration(days: 140)),
+lastDate: DateTime.now().add(Duration(days: 4)),
+onDateSelected: (date) {
+print(date);
+},
+)
+```
+
+# Props
+
+| Props  | Types  | Required  | defaultValues  |
+| ------------ | ------------ | ------------ |  ------------ |
+| initialDate  | DateTime  | True  | |
+| firstDate  |  DateTime | True  | |
+| lastDate  | DateTime  | True  | |
+| onDateSelected  | Funtion  | False  | |
+| backgroundColor  | Color?  | False  | |
+| selectedDayLogo  | ImageProvider\<Object>?  | False  | |
+| controller  | CalendarAgendaController?  | False  | |
+| selectedDateColor  | Color?  | False  | Colors.black |
+| dateColor  | Color?  | False  | Colors.white |
+| calendarBackground  | Color?  | False  |Colors.white |
+| calendarEventSelectedColor  | Color?  | False  | Colors.white |
+| calendarEventColor  | Color?  | False  | Colors.blue |
+| locale  | String?  | False  | 'en' |
+| leading  | Widget?  | False  | |
+| appbar  | bool  | False  | False |
+| events  | List\<DateTime>?  | False  | |
+| fullCalendar  | bool  | False  | True |
+| fullCalendarScroll  | FullCalendarScroll  | False  |FullCalendarScroll.vertical |
+| fullCalendarDay  | WeekDay  | False  | WeekDay.short |
+| weekDay  | WeekDay  | False  | WeekDay.short |
+| selectedDayPosition  | SelectedDayPosition  | False  | SelectedDayPosition.left |
+
+---
+
+
+
+## Thank you
+Special thanks goes to all contributors to this package. Make sure to check them out.<br />
+
+<a href="https://github.com/dhwanish-3/calendar_slider/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=dhwanish-3/calendar_slider" />
+</a>
