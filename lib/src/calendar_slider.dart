@@ -6,7 +6,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 export 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'full_calendar.dart';
 
-class CalendarAgendaController {
+class CalendarSliderController {
   CalendarAgendaState? state;
 
   void bindState(CalendarAgendaState state) {
@@ -22,24 +22,24 @@ class CalendarAgendaController {
   }
 }
 
-class CalendarAgenda extends StatefulWidget implements PreferredSizeWidget {
-  final CalendarAgendaController? controller;
+class CalendarSlider extends StatefulWidget implements PreferredSizeWidget {
+  final CalendarSliderController? controller;
 
   final DateTime initialDate;
   final DateTime firstDate;
   final DateTime lastDate;
   final Function onDateSelected;
 
-  final double selectedHeight;
-  double? selectedWidth;
-  final double unSelectedHeight;
-  double? unSelectedWidth;
+  final double selectedTileHeight;
+  double? selectedTileWidth;
+  final double tileHeight;
+  double? tileWidth;
 
   final Color? backgroundColor;
   final SelectedDayPosition selectedDayPosition;
   final Color? selectedDateColor;
   final Color? selectedBackgroundColor;
-  final Color? unSelectedBackgroundColor;
+  final Color? monthYearButtonColor;
   final Color? dateColor;
   final Color? calendarBackground;
   final Color? calendarEventSelectedColor;
@@ -58,20 +58,20 @@ class CalendarAgenda extends StatefulWidget implements PreferredSizeWidget {
   final double leftMargin;
   final List<DateTime>? events;
 
-  CalendarAgenda({
+  CalendarSlider({
     Key? key,
     required this.initialDate,
     required this.firstDate,
     required this.lastDate,
     required this.onDateSelected,
-    this.selectedHeight = 75.0,
-    this.unSelectedHeight = 60.0,
+    this.selectedTileHeight = 75.0,
+    this.tileHeight = 60.0,
     this.backgroundColor,
     this.selectedDayLogo,
     this.controller,
     this.selectedDateColor = Colors.black,
     this.selectedBackgroundColor = Colors.blue,
-    this.unSelectedBackgroundColor = Colors.grey,
+    this.monthYearButtonColor = Colors.grey,
     this.dateColor = Colors.white,
     this.calendarBackground = Colors.white,
     this.calendarEventSelectedColor = Colors.white,
@@ -109,7 +109,7 @@ class CalendarAgenda extends StatefulWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(250.0);
 }
 
-class CalendarAgendaState extends State<CalendarAgenda>
+class CalendarAgendaState extends State<CalendarSlider>
     with TickerProviderStateMixin {
   final ItemScrollController _scrollController = ItemScrollController();
 
@@ -125,9 +125,6 @@ class CalendarAgendaState extends State<CalendarAgenda>
 
   String get _locale =>
       widget.locale ?? Localizations.localeOf(context).languageCode;
-
-  static String uri =
-      'data:image/jpeg;base64,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';
 
   @override
   void initState() {
@@ -148,8 +145,8 @@ class CalendarAgendaState extends State<CalendarAgenda>
   @override
   Widget build(BuildContext context) {
     backgroundColor = widget.backgroundColor ?? Theme.of(context).primaryColor;
-    widget.selectedWidth = MediaQuery.of(context).size.width / 6 - 12;
-    widget.unSelectedWidth = MediaQuery.of(context).size.width / 7 - 12;
+    widget.selectedTileWidth = MediaQuery.of(context).size.width / 6 - 12;
+    widget.tileWidth = MediaQuery.of(context).size.width / 7 - 12;
 
     Widget dayList() {
       return Container(
@@ -193,11 +190,11 @@ class CalendarAgendaState extends State<CalendarAgenda>
                       onTap: () => _goToActualDay(index),
                       child: Container(
                         height: isSelected
-                            ? widget.selectedHeight
-                            : widget.unSelectedHeight,
+                            ? widget.selectedTileHeight
+                            : widget.tileHeight,
                         width: isSelected
-                            ? widget.selectedWidth
-                            : widget.unSelectedWidth,
+                            ? widget.selectedTileWidth
+                            : widget.tileWidth,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12.0),
                           color: isSelected
@@ -301,14 +298,14 @@ class CalendarAgendaState extends State<CalendarAgenda>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    leading,
+                    // leading,
                     widget.fullCalendar!
                         ? GestureDetector(
                             onTap: () => widget.fullCalendar!
                                 ? _showFullCalendar(_locale, widget.weekDay)
                                 : null,
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Container(
@@ -317,7 +314,7 @@ class CalendarAgendaState extends State<CalendarAgenda>
                                       horizontal: 5, vertical: 2),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    color: widget.unSelectedBackgroundColor,
+                                    color: widget.monthYearButtonColor,
                                   ),
                                   child: Text(
                                     ('${DateFormat.yMMMM(Locale(_locale).toString()).format(_selectedDate!).split(' ')[0].substring(0, 3).toUpperCase()} ${DateFormat.yMMMM(Locale(_locale).toString()).format(_selectedDate!).split(' ')[1]}'),
@@ -476,7 +473,7 @@ class CalendarAgendaState extends State<CalendarAgenda>
 
   _initCalendar() {
     if (widget.controller != null &&
-        widget.controller is CalendarAgendaController) {
+        widget.controller is CalendarSliderController) {
       widget.controller!.bindState(this);
     }
     _selectedDate = widget.initialDate;
