@@ -1,4 +1,4 @@
-**CalendarSllider widget with a lot of customization**
+**CalendarSlider widget with a lot of customization**
 
 <p align="left">
 <a href="https://github.com/dhwanish-3/calendar_slider"></a>

@@ -5,11 +5,12 @@ export 'package:intl/date_symbol_data_local.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 export 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'full_calendar.dart';
+import 'types.dart';
 
 class CalendarSliderController {
-  CalendarAgendaState? state;
+  CalendarSliderState? state;
 
-  void bindState(CalendarAgendaState state) {
+  void bindState(CalendarSliderState state) {
     this.state = state;
   }
 
@@ -31,9 +32,9 @@ class CalendarSlider extends StatefulWidget implements PreferredSizeWidget {
   final Function onDateSelected;
 
   final double selectedTileHeight;
-  double? selectedTileWidth;
+  late final double? selectedTileWidth;
   final double tileHeight;
-  double? tileWidth;
+  late final double? tileWidth;
 
   final Color? backgroundColor;
   final SelectedDayPosition selectedDayPosition;
@@ -103,13 +104,13 @@ class CalendarSlider extends StatefulWidget implements PreferredSizeWidget {
         super(key: key);
 
   @override
-  CalendarAgendaState createState() => CalendarAgendaState();
+  CalendarSliderState createState() => CalendarSliderState();
 
   @override
   Size get preferredSize => const Size.fromHeight(250.0);
 }
 
-class CalendarAgendaState extends State<CalendarSlider>
+class CalendarSliderState extends State<CalendarSlider>
     with TickerProviderStateMixin {
   final ItemScrollController _scrollController = ItemScrollController();
 
