@@ -28,28 +28,28 @@ import 'package:calendar_slider/calendar_slider.dart';
 
  SelectedDayPosition.center         |  SelectedDayPosition.Left      | SelectedDayPosition.Right
 :-------------------------:|:-------------------------:|:-------------------------:
-![](https://github.com/sud0su/calendar_agenda/blob/main/assets/selectedDayCenter.png?raw=true) | ![](https://github.com/sud0su/calendar_agenda/blob/main/assets/selectedDayLeft.png?raw=true) | ![](https://github.com/sud0su/calendar_agenda/blob/main/assets/selectedDayRight.png?raw=true)
+![](assets/position_centre.png) | ![](assets/position_left.png) | ![](assets/position_right.png)
 
  FullCalendarScroll.vertical         |  FullCalendarScroll.horizontal
 :-------------------------:|:-------------------------:
-![](https://github.com/sud0su/calendar_agenda/blob/main/assets/FullCalendarScrollVertical.png?raw=true) | ![](https://github.com/sud0su/calendar_agenda/blob/main/assets/FullCalendarScrollHorizontal.png?raw=true)
+![](assets/full_calendar_vertical.jpg) | ![](assets/full_calendar_horizontal.jpg)
 
 
 ### Demo
 
-![](https://github.com/sud0su/calendar_agenda/blob/main/assets/demo.gif?raw=true)
+![Demo](assets/demo.gif)
 
 # How to use?
 
 Use the **CalendarAgenda** Widget
 ```dart
 CalendarAgenda(
-initialDate: DateTime.now(),
-firstDate: DateTime.now().subtract(Duration(days: 140)),
-lastDate: DateTime.now().add(Duration(days: 4)),
-onDateSelected: (date) {
-print(date);
-},
+  initialDate: DateTime.now(),
+  firstDate: DateTime.now().subtract(Duration(days: 140)),
+  lastDate: DateTime.now().add(Duration(days: 4)),
+  onDateSelected: (date) {
+                    print(date);
+                  },
 )
 ```
 
@@ -57,27 +57,31 @@ print(date);
 
 | Props  | Types  | Required  | defaultValues  |
 | ------------ | ------------ | ------------ |  ------------ |
-| initialDate  | DateTime  | True  | |
-| firstDate  |  DateTime | True  | |
-| lastDate  | DateTime  | True  | |
-| onDateSelected  | Funtion  | False  | |
-| backgroundColor  | Color?  | False  | |
-| selectedDayLogo  | ImageProvider\<Object>?  | False  | |
-| controller  | CalendarAgendaController?  | False  | |
+| initialDate  | DateTime  | True  |
+| firstDate  |  DateTime | True  |
+| lastDate  | DateTime  | True  |
+| onDateSelected  | Funtion  | False  |
+| controller  | CalendarAgendaController?  | False  |
+| backgroundColor  | Color?  | False  | Colors.transparent |
+| tileHeight  | double?  | False  | 60.0 |
+| selectedTileHeight  | double?  | False  | 75.0 |
+| dateColor  | Color?  | False  | Colors.black |
 | selectedDateColor  | Color?  | False  | Colors.black |
-| dateColor  | Color?  | False  | Colors.white |
-| calendarBackground  | Color?  | False  |Colors.white |
+| tileShadow | BoxShadow? | False | BoxShadow(color: Colors.black.withOpacity(0.13),spreadRadius: 1,blurRadius: 2,offset: const Offset(0, 2),), |
+| tileBackgroundColor  | Color?  | False  | Colors.white |
+| selectedTileBackgroundColor  | Color?  | False  | Colors.blue |
+| monthYearTextColor  | Color?  | False  | Colors.black |
+| monthYearButtonBackgroundColor  | Color?  | False  | Colors.grey |
 | calendarEventSelectedColor  | Color?  | False  | Colors.white |
 | calendarEventColor  | Color?  | False  | Colors.blue |
+| fullCalendarBackgroundImage | DecorationImage? | False | null |
 | locale  | String?  | False  | 'en' |
-| leading  | Widget?  | False  | |
-| appbar  | bool  | False  | False |
-| events  | List\<DateTime>?  | False  | |
+| events  | List\<DateTime>?  | False  | [] |
 | fullCalendar  | bool  | False  | True |
-| fullCalendarScroll  | FullCalendarScroll  | False  |FullCalendarScroll.vertical |
-| fullCalendarDay  | WeekDay  | False  | WeekDay.short |
+| fullCalendarScroll  | FullCalendarScroll  | False  |FullCalendarScroll.horizontal |
 | weekDay  | WeekDay  | False  | WeekDay.short |
-| selectedDayPosition  | SelectedDayPosition  | False  | SelectedDayPosition.left |
+| fullCalendarWeekDay  | WeekDay  | False  | WeekDay.short |
+| selectedDayPosition  | SelectedDayPosition  | False  | SelectedDayPosition.center |
 
 ---
 

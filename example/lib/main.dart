@@ -91,7 +91,7 @@ class _ExamplePageState extends State<ExamplePage> {
             ),
             CalendarSlider(
               controller: _secondController,
-              selectedDayPosition: SelectedDayPosition.right,
+              selectedDayPosition: SelectedDayPosition.center,
               locale: 'en',
               selectedDateColor: Colors.black,
               initialDate: DateTime.now(),
