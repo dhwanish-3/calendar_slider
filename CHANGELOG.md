@@ -9,3 +9,7 @@
 * Added center parameter to SelectedDayPosition
 * Added go to selected date in full calendar mode
 * Added many more color customization
+
+## 0.0.2
+* Test release
+* Added example project with demo
