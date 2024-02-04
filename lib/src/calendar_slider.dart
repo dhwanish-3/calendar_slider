@@ -33,9 +33,7 @@ class CalendarSlider extends StatefulWidget implements PreferredSizeWidget {
       onDateSelected; // function to be called when a date is selected
 
   final double selectedTileHeight; // height of the selected date tile
-  final double? selectedTileWidth; // width of the selected date tile
   final double tileHeight; // height of the date tile
-  final double? tileWidth; // width of the date tile
 
   final Color? monthYearTextColor; // color of the month year text
   final Color? backgroundColor; // background color for the entire widget
@@ -49,7 +47,6 @@ class CalendarSlider extends StatefulWidget implements PreferredSizeWidget {
   final Color?
       monthYearButtonBackgroundColor; // background color of the month year button on top
   final Color? dateColor; // color of the date on each tile
-  final Color? calendarBackground; // unknown
   final Color?
       calendarEventSelectedColor; // color of the event on the selected date
   final Color? calendarEventColor; // color of the event on the date
@@ -60,7 +57,6 @@ class CalendarSlider extends StatefulWidget implements PreferredSizeWidget {
   final String? locale; // locale of the calendar
   final bool? fullCalendar; // if the full calendar is enabled
   final WeekDay? fullCalendarWeekDay;
-  final double? padding; // padding of the slider
   final WeekDay
       weekDay; // format of the week day (long or short)("Monday" or "Mon")
   final List<DateTime>? events; // list of events
@@ -71,30 +67,26 @@ class CalendarSlider extends StatefulWidget implements PreferredSizeWidget {
     required this.firstDate,
     required this.lastDate,
     required this.onDateSelected,
-    this.selectedTileHeight = 75.0,
-    this.tileHeight = 60.0,
-    this.selectedTileWidth,
-    this.tileWidth,
-    this.monthYearTextColor = Colors.white,
-    this.backgroundColor = Colors.transparent,
     this.controller,
+    this.backgroundColor = Colors.transparent,
+    this.tileHeight = 60.0,
+    this.selectedTileHeight = 75.0,
+    this.dateColor = Colors.black,
     this.selectedDateColor = Colors.black,
     this.tileShadow,
     this.tileBackgroundColor = Colors.white,
     this.selectedTileBackgroundColor = Colors.blue,
+    this.monthYearTextColor = Colors.white,
     this.monthYearButtonBackgroundColor = Colors.grey,
-    this.dateColor = Colors.black,
-    this.calendarBackground = Colors.yellow,
     this.calendarEventSelectedColor = Colors.white,
     this.calendarEventColor = Colors.blue,
     this.fullCalendarBackgroundImage,
     this.locale = 'en',
-    this.padding,
     this.events,
     this.fullCalendar = true,
     this.fullCalendarScroll = FullCalendarScroll.horizontal,
-    this.fullCalendarWeekDay = WeekDay.short,
     this.weekDay = WeekDay.short,
+    this.fullCalendarWeekDay = WeekDay.short,
     this.selectedDayPosition = SelectedDayPosition.center,
   })  : assert(
           initialDate.difference(firstDate).inDays >= 0,
@@ -138,7 +130,7 @@ class CalendarSliderState extends State<CalendarSlider>
     super.initState();
     initializeDateFormatting(_locale);
     _initCalendar();
-    padding = widget.padding ?? 25.0;
+    padding = 25.0;
     if (widget.selectedDayPosition == SelectedDayPosition.center) {
       _initialScrollAlignment = 0.44;
       _scrollAlignment = 0.42;
