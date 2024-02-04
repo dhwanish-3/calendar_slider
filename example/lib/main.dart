@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:calendar_slider/calendar_slider.dart';
 import 'package:flutter/material.dart';
 
@@ -30,14 +29,12 @@ class ExamplePage extends StatefulWidget {
   const ExamplePage({Key? key}) : super(key: key);
 
   @override
-  _ExamplePageState createState() => _ExamplePageState();
+  State<ExamplePage> createState() => _ExamplePageState();
 }
 
 class _ExamplePageState extends State<ExamplePage> {
-  final CalendarSliderController _calendarSliderControllerAppBar =
-      CalendarSliderController();
-  final CalendarSliderController _calendarSliderControllerNotAppBar =
-      CalendarSliderController();
+  final CalendarSliderController _firstController = CalendarSliderController();
+  final CalendarSliderController _secondController = CalendarSliderController();
 
   late DateTime _selectedDateAppBBar;
   late DateTime _selectedDateNotAppBBar;
@@ -55,77 +52,51 @@ class _ExamplePageState extends State<ExamplePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CalendarSlider(
-        controller: _calendarSliderControllerAppBar,
-        appbar: true,
-        selectedDayPosition: SelectedDayPosition.right,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Colors.white,
-          ),
-          onPressed: () {},
-        ),
-        weekDay: WeekDay.long,
-        fullCalendarScroll: FullCalendarScroll.horizontal,
-        fullCalendarDay: WeekDay.long,
-        selectedDateColor: Colors.green.shade900,
+        controller: _firstController,
+        selectedDayPosition: SelectedDayPosition.center,
+        fullCalendarScroll: FullCalendarScroll.vertical,
+        backgroundColor: Colors.lightBlue,
+        fullCalendarWeekDay: WeekDay.short,
+        selectedTileBackgroundColor: Colors.white,
+        monthYearButtonBackgroundColor: Colors.white,
+        monthYearTextColor: Colors.black,
+        tileBackgroundColor: Colors.lightBlue,
+        selectedDateColor: Colors.black,
         dateColor: Colors.white,
+        tileShadow: BoxShadow(
+          color: Colors.black.withOpacity(1),
+        ),
         locale: 'en',
         initialDate: DateTime.now(),
-        calendarEventColor: Colors.green,
-        firstDate: DateTime.now().subtract(const Duration(days: 140)),
-        lastDate: DateTime.now().add(const Duration(days: 60)),
-        events: List.generate(
-            100,
-            (index) => DateTime.now()
-                .subtract(Duration(days: index * random.nextInt(5)))),
+        firstDate: DateTime.now().subtract(const Duration(days: 100)),
+        lastDate: DateTime.now().add(const Duration(days: 100)),
         onDateSelected: (date) {
           setState(() {
             _selectedDateAppBBar = date;
           });
         },
-        calendarLogo: Image.network(
-          'https://www.kindpng.com/picc/m/355-3557482_flutter-logo-png-transparent-png.png',
-          scale: 5.0,
-        ),
-        selectedDayLogo: const NetworkImage(
-          'https://www.kindpng.com/picc/m/355-3557482_flutter-logo-png-transparent-png.png',
-          scale: 15.0,
-        ),
       ),
       body: Center(
         child: Column(
           children: [
             ElevatedButton(
               onPressed: () {
-                _calendarSliderControllerAppBar.goToDay(DateTime.now());
+                _firstController.goToDay(DateTime.now());
               },
-              child: const Text("Today, appbar = true"),
+              child: const Text("Go to today"),
             ),
             Text('Selected date is $_selectedDateAppBBar'),
             const SizedBox(
               height: 20.0,
             ),
             CalendarSlider(
-              controller: _calendarSliderControllerNotAppBar,
-              leading: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.3,
-                child: const Text(
-                  "Slider anda hari ini adalah sebagai berikut",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              // fullCalendar: false,
+              controller: _secondController,
+              selectedDayPosition: SelectedDayPosition.right,
               locale: 'en',
-              weekDay: WeekDay.long,
-              fullCalendarDay: WeekDay.short,
-              selectedDateColor: Colors.blue.shade900,
+              selectedDateColor: Colors.black,
               initialDate: DateTime.now(),
               firstDate: DateTime.now().subtract(const Duration(days: 140)),
-              lastDate: DateTime.now().add(const Duration(days: 4)),
+              lastDate: DateTime.now().add(const Duration(days: 400)),
               events: List.generate(
                   100,
                   (index) => DateTime.now()
@@ -135,21 +106,18 @@ class _ExamplePageState extends State<ExamplePage> {
                   _selectedDateNotAppBBar = date;
                 });
               },
-              calendarLogo: Image.network(
+              fullCalendarBackgroundImage: Image.network(
                 'https://www.kindpng.com/picc/m/355-3557482_flutter-logo-png-transparent-png.png',
                 scale: 5.0,
               ),
             ),
             ElevatedButton(
               onPressed: () {
-                _calendarSliderControllerNotAppBar.goToDay(DateTime.now());
+                _secondController.goToDay(DateTime.now());
               },
-              child: const Text("Today, appbar = false (default value)"),
+              child: const Text("Go to today"),
             ),
             Text('Selected date is $_selectedDateNotAppBBar'),
-            const SizedBox(
-              height: 20.0,
-            ),
           ],
         ),
       ),

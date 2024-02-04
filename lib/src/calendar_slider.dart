@@ -26,38 +26,44 @@ class CalendarSliderController {
 class CalendarSlider extends StatefulWidget implements PreferredSizeWidget {
   final CalendarSliderController? controller;
 
-  final DateTime initialDate;
-  final DateTime firstDate;
-  final DateTime lastDate;
-  final Function onDateSelected;
+  final DateTime initialDate; // date to be shown initially
+  final DateTime firstDate; // the lower limit of the date range
+  final DateTime lastDate; // the upper limit of the date range
+  final Function
+      onDateSelected; // function to be called when a date is selected
 
-  final double selectedTileHeight;
-  late final double? selectedTileWidth;
-  final double tileHeight;
-  late final double? tileWidth;
+  final double selectedTileHeight; // height of the selected date tile
+  final double? selectedTileWidth; // width of the selected date tile
+  final double tileHeight; // height of the date tile
+  final double? tileWidth; // width of the date tile
 
-  final Color? backgroundColor;
-  final SelectedDayPosition selectedDayPosition;
-  final Color? selectedDateColor;
-  final Color? selectedBackgroundColor;
-  final Color? monthYearButtonColor;
-  final Color? dateColor;
-  final Color? calendarBackground;
-  final Color? calendarEventSelectedColor;
-  final Color? calendarEventColor;
-  final FullCalendarScroll fullCalendarScroll;
-  final Widget? calendarLogo;
-  final ImageProvider<Object>? selectedDayLogo;
+  final Color? monthYearTextColor; // color of the month year text
+  final Color? backgroundColor; // background color for the entire widget
+  final SelectedDayPosition
+      selectedDayPosition; // position of the selected day(center, left, right)
+  final Color? selectedDateColor; // color of the selected date
+  final Color? tileBackgroundColor; // background color of the date tile
+  final BoxShadow? tileShadow; // shadow of the date tile
+  final Color?
+      selectedTileBackgroundColor; // background color of the selected date tile
+  final Color?
+      monthYearButtonBackgroundColor; // background color of the month year button on top
+  final Color? dateColor; // color of the date on each tile
+  final Color? calendarBackground; // unknown
+  final Color?
+      calendarEventSelectedColor; // color of the event on the selected date
+  final Color? calendarEventColor; // color of the event on the date
+  final FullCalendarScroll
+      fullCalendarScroll; // scroll direction of the full calendar
+  final Widget? fullCalendarBackgroundImage; // logo of the calendar
 
-  final String? locale;
-  final bool? fullCalendar;
-  final WeekDay? fullCalendarDay;
-  final double? padding;
-  final Widget? leading;
-  final WeekDay weekDay;
-  final bool appbar;
-  final double leftMargin;
-  final List<DateTime>? events;
+  final String? locale; // locale of the calendar
+  final bool? fullCalendar; // if the full calendar is enabled
+  final WeekDay? fullCalendarWeekDay;
+  final double? padding; // padding of the slider
+  final WeekDay
+      weekDay; // format of the week day (long or short)("Monday" or "Mon")
+  final List<DateTime>? events; // list of events
 
   CalendarSlider({
     Key? key,
@@ -67,28 +73,29 @@ class CalendarSlider extends StatefulWidget implements PreferredSizeWidget {
     required this.onDateSelected,
     this.selectedTileHeight = 75.0,
     this.tileHeight = 60.0,
-    this.backgroundColor,
-    this.selectedDayLogo,
+    this.selectedTileWidth,
+    this.tileWidth,
+    this.monthYearTextColor = Colors.white,
+    this.backgroundColor = Colors.transparent,
     this.controller,
     this.selectedDateColor = Colors.black,
-    this.selectedBackgroundColor = Colors.blue,
-    this.monthYearButtonColor = Colors.grey,
-    this.dateColor = Colors.white,
-    this.calendarBackground = Colors.white,
+    this.tileShadow,
+    this.tileBackgroundColor = Colors.white,
+    this.selectedTileBackgroundColor = Colors.blue,
+    this.monthYearButtonBackgroundColor = Colors.grey,
+    this.dateColor = Colors.black,
+    this.calendarBackground = Colors.yellow,
     this.calendarEventSelectedColor = Colors.white,
     this.calendarEventColor = Colors.blue,
-    this.calendarLogo,
+    this.fullCalendarBackgroundImage,
     this.locale = 'en',
     this.padding,
-    this.leading,
-    this.appbar = false,
     this.events,
     this.fullCalendar = true,
-    this.leftMargin = 0,
-    this.fullCalendarScroll = FullCalendarScroll.vertical,
-    this.fullCalendarDay = WeekDay.short,
+    this.fullCalendarScroll = FullCalendarScroll.horizontal,
+    this.fullCalendarWeekDay = WeekDay.short,
     this.weekDay = WeekDay.short,
-    this.selectedDayPosition = SelectedDayPosition.left,
+    this.selectedDayPosition = SelectedDayPosition.center,
   })  : assert(
           initialDate.difference(firstDate).inDays >= 0,
           'initialDate must be on or after firstDate',
@@ -114,9 +121,8 @@ class CalendarSliderState extends State<CalendarSlider>
     with TickerProviderStateMixin {
   final ItemScrollController _scrollController = ItemScrollController();
 
-  late Color backgroundColor;
   late double padding;
-  late Widget leading;
+  late double _initialScrollAlignment;
   late double _scrollAlignment;
 
   final List<String> _eventDates = [];
@@ -133,8 +139,16 @@ class CalendarSliderState extends State<CalendarSlider>
     initializeDateFormatting(_locale);
     _initCalendar();
     padding = widget.padding ?? 25.0;
-    leading = widget.leading ?? Container();
-    _scrollAlignment = widget.leftMargin / 440;
+    if (widget.selectedDayPosition == SelectedDayPosition.center) {
+      _initialScrollAlignment = 0.44;
+      _scrollAlignment = 0.42;
+    } else if (widget.selectedDayPosition == SelectedDayPosition.left) {
+      _initialScrollAlignment = 0.01;
+      _scrollAlignment = 0.02;
+    } else {
+      _initialScrollAlignment = 0.83;
+      _scrollAlignment = 0.842;
+    }
 
     if (widget.events != null) {
       for (var element in widget.events!) {
@@ -145,14 +159,13 @@ class CalendarSliderState extends State<CalendarSlider>
 
   @override
   Widget build(BuildContext context) {
-    backgroundColor = widget.backgroundColor ?? Theme.of(context).primaryColor;
-    widget.selectedTileWidth = MediaQuery.of(context).size.width / 6 - 12;
-    widget.tileWidth = MediaQuery.of(context).size.width / 7 - 12;
+    double selectedTileWidth = MediaQuery.of(context).size.width / 6 - 12;
+    double tileWidth = MediaQuery.of(context).size.width / 7 - 12;
 
     Widget dayList() {
       return Container(
         width: MediaQuery.of(context).size.width,
-        height: widget.appbar ? 125 : 100,
+        height: 100,
         padding: const EdgeInsets.all(5),
         alignment: Alignment.bottomCenter,
         child: ScrollablePositionedList.builder(
@@ -163,15 +176,8 @@ class CalendarSliderState extends State<CalendarSlider>
                         10)
                 : const EdgeInsets.symmetric(horizontal: 10),
             initialScrollIndex: _daySelectedIndex ?? 0,
-            // initialAlignment: _scrollAlignment,
-            initialAlignment:
-                widget.selectedDayPosition == SelectedDayPosition.center
-                    ? 84 / 200
-                    : _scrollAlignment,
+            initialAlignment: _initialScrollAlignment,
             scrollDirection: Axis.horizontal,
-            reverse: widget.selectedDayPosition == SelectedDayPosition.left
-                ? false
-                : true,
             itemScrollController: _scrollController,
             physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
@@ -181,93 +187,86 @@ class CalendarSliderState extends State<CalendarSlider>
               DateTime date = _dates[index];
               bool isSelected = _daySelectedIndex == index;
 
-              return Container(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 5.0, horizontal: 4.0),
-                    child: GestureDetector(
-                      onTap: () => _goToActualDay(index),
-                      child: Container(
-                        height: isSelected
-                            ? widget.selectedTileHeight
-                            : widget.tileHeight,
-                        width: isSelected
-                            ? widget.selectedTileWidth
-                            : widget.tileWidth,
-                        decoration: BoxDecoration(
+              return Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 5.0, horizontal: 4.0),
+                  child: GestureDetector(
+                    onTap: () => _goToActualDay(index),
+                    child: Container(
+                      height: isSelected
+                          ? widget.selectedTileHeight
+                          : widget.tileHeight,
+                      width: isSelected ? selectedTileWidth : tileWidth,
+                      decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12.0),
                           color: isSelected
-                              ? widget.selectedBackgroundColor
-                              : Colors.white,
+                              ? widget.selectedTileBackgroundColor
+                              : widget.tileBackgroundColor,
                           boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.13),
-                              spreadRadius: 1,
-                              blurRadius: 2,
-                              offset: const Offset(0, 2),
-                            )
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _eventDates
-                                    .contains(date.toString().split(" ").first)
-                                ? isSelected
-                                    ? Icon(
-                                        Icons.bookmark,
-                                        size: 16,
-                                        color: isSelected
-                                            ? widget.selectedDateColor
-                                            : widget.dateColor!
-                                                .withOpacity(0.5),
-                                      )
-                                    : Icon(
-                                        Icons.bookmark,
-                                        size: 8,
-                                        color: isSelected
-                                            ? widget.calendarEventColor
-                                            : widget.dateColor!
-                                                .withOpacity(0.5),
-                                      )
-                                : const SizedBox(
-                                    height: 5.0,
-                                  ),
-                            Text(
-                              widget.weekDay == WeekDay.long
-                                  ? DateFormat.EEEE(Locale(_locale).toString())
-                                      .format(date)
-                                  : DateFormat.E(Locale(_locale).toString())
-                                      .format(date),
-                              style: TextStyle(
-                                fontSize: 13,
+                            widget.tileShadow ??
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.13),
+                                  spreadRadius: 1,
+                                  blurRadius: 2,
+                                  offset: const Offset(0, 2),
+                                ),
+                          ]),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _eventDates.contains(date.toString().split(" ").first)
+                              ? isSelected
+                                  ? Icon(
+                                      Icons.bookmark,
+                                      size: 16,
+                                      color: isSelected
+                                          ? widget.selectedDateColor
+                                          : widget.dateColor!.withOpacity(0.5),
+                                    )
+                                  : Icon(
+                                      Icons.bookmark,
+                                      size: 8,
+                                      color: isSelected
+                                          ? widget.calendarEventColor
+                                          : widget.dateColor!.withOpacity(0.5),
+                                    )
+                              : const SizedBox(
+                                  height: 5.0,
+                                ),
+                          Text(
+                            widget.weekDay == WeekDay.long
+                                ? DateFormat.EEEE(Locale(_locale).toString())
+                                    .format(date)
+                                : DateFormat.E(Locale(_locale).toString())
+                                    .format(date),
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: isSelected
+                                  ? widget.selectedDateColor
+                                  : widget.dateColor,
+                              fontWeight: isSelected
+                                  ? FontWeight.w800
+                                  : FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 2.0,
+                          ),
+                          Text(
+                            DateFormat("dd").format(date),
+                            style: TextStyle(
+                                fontSize: isSelected ? 20.0 : 16.0,
                                 color: isSelected
                                     ? widget.selectedDateColor
                                     : widget.dateColor,
                                 fontWeight: isSelected
-                                    ? FontWeight.w800
-                                    : FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 2.0,
-                            ),
-                            Text(
-                              DateFormat("dd").format(date),
-                              style: TextStyle(
-                                  fontSize: isSelected ? 20.0 : 16.0,
-                                  color: isSelected
-                                      ? widget.selectedDateColor
-                                      : widget.dateColor,
-                                  fontWeight: isSelected
-                                      ? FontWeight.bold
-                                      : FontWeight.w500),
-                            ),
-                            const SizedBox(height: 5),
-                          ],
-                        ),
+                                    ? FontWeight.bold
+                                    : FontWeight.w500),
+                          ),
+                          const SizedBox(height: 5),
+                        ],
                       ),
                     ),
                   ),
@@ -279,7 +278,7 @@ class CalendarSliderState extends State<CalendarSlider>
 
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: widget.appbar ? 210 : 150.0,
+      height: 180,
       child: Stack(
         children: [
           Positioned(
@@ -287,11 +286,11 @@ class CalendarSliderState extends State<CalendarSlider>
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: 190.0,
-              color: backgroundColor,
+              color: widget.backgroundColor ?? Colors.transparent,
             ),
           ),
           Positioned(
-            top: widget.appbar ? 50.0 : 20.0,
+            top: 50,
             child: Padding(
               padding: EdgeInsets.only(right: padding, left: 10),
               child: SizedBox(
@@ -299,7 +298,6 @@ class CalendarSliderState extends State<CalendarSlider>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    // leading,
                     widget.fullCalendar!
                         ? GestureDetector(
                             onTap: () => widget.fullCalendar!
@@ -310,19 +308,19 @@ class CalendarSliderState extends State<CalendarSlider>
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Container(
-                                  width: 100.0,
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 2),
+                                      horizontal: 12, vertical: 6),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    color: widget.monthYearButtonColor,
+                                    color:
+                                        widget.monthYearButtonBackgroundColor,
                                   ),
                                   child: Text(
-                                    ('${DateFormat.yMMMM(Locale(_locale).toString()).format(_selectedDate!).split(' ')[0].substring(0, 3).toUpperCase()} ${DateFormat.yMMMM(Locale(_locale).toString()).format(_selectedDate!).split(' ')[1]}'),
-                                    style: const TextStyle(
+                                    ('${DateFormat.yMMMM(Locale(_locale).toString()).format(_selectedDate!).split(' ')[0].substring(0, 3)}  ${DateFormat.yMMMM(Locale(_locale).toString()).format(_selectedDate!).split(' ')[1]}'),
+                                    style: TextStyle(
                                       overflow: TextOverflow.clip,
                                       fontSize: 18.0,
-                                      color: Colors.white,
+                                      color: widget.monthYearTextColor,
                                       fontWeight: FontWeight.w600,
                                     ),
                                     textAlign: TextAlign.center,
@@ -361,10 +359,6 @@ class CalendarSliderState extends State<CalendarSlider>
     List<DateTime> listDates = List.generate(
         (last.difference(first).inHours / 24).round(),
         (index) => basicDate.add(Duration(days: index)));
-
-    widget.selectedDayPosition == SelectedDayPosition.left
-        ? listDates.sort((b, a) => b.compareTo(a))
-        : listDates.sort((b, a) => a.compareTo(b));
 
     setState(() {
       _dates = listDates;
@@ -418,9 +412,9 @@ class CalendarSliderState extends State<CalendarSlider>
                   dateSelectedColor: widget.calendarEventSelectedColor,
                   events: _eventDates,
                   selectedDate: _selectedDate,
-                  fullCalendarDay: widget.fullCalendarDay,
+                  fullCalendarDay: widget.fullCalendarWeekDay,
                   calendarScroll: widget.fullCalendarScroll,
-                  calendarBackground: widget.calendarLogo,
+                  calendarBackground: widget.fullCalendarBackgroundImage,
                   locale: locale,
                   onDateChange: (value) {
                     getDate(value);
@@ -456,9 +450,7 @@ class CalendarSliderState extends State<CalendarSlider>
   void _moveToDayIndex(int index) {
     _scrollController.scrollTo(
       index: index,
-      alignment: widget.selectedDayPosition == SelectedDayPosition.center
-          ? 0.42
-          : _scrollAlignment,
+      alignment: _scrollAlignment,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
