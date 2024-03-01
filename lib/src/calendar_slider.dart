@@ -284,7 +284,7 @@ class CalendarSliderState extends State<CalendarSlider>
 
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: 180,
+      height: 180 - (widget.fullCalendar! ? 0 : widget.selectedTileHeight),
       child: Stack(
         children: [
           Positioned(
