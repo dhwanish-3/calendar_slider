@@ -43,7 +43,7 @@ import 'package:calendar_slider/calendar_slider.dart';
 
 Use the **CalendarAgenda** Widget
 ```dart
-CalendarAgenda(
+CalendarSlider(
   initialDate: DateTime.now(),
   firstDate: DateTime.now().subtract(Duration(days: 140)),
   lastDate: DateTime.now().add(Duration(days: 4)),
