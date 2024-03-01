@@ -45,6 +45,8 @@ class CalendarSlider extends StatefulWidget implements PreferredSizeWidget {
   final Color?
       selectedTileBackgroundColor; // background color of the selected date tile
   final Color?
+      disabledTileBackgroundColor; // background color of the selected date tile
+  final Color?
       monthYearButtonBackgroundColor; // background color of the month year button on top
   final Color? dateColor; // color of the date on each tile
   final Color?
@@ -61,6 +63,9 @@ class CalendarSlider extends StatefulWidget implements PreferredSizeWidget {
       weekDay; // format of the week day (long or short)("Monday" or "Mon")
   final List<DateTime>? events; // list of events
 
+  final DateTime? disabledTo;
+  final DateTime? disabledFrom;
+
   CalendarSlider({
     Key? key,
     required this.initialDate,
@@ -76,6 +81,7 @@ class CalendarSlider extends StatefulWidget implements PreferredSizeWidget {
     this.tileShadow,
     this.tileBackgroundColor = Colors.white,
     this.selectedTileBackgroundColor = Colors.blue,
+    this.disabledTileBackgroundColor = Colors.grey,
     this.monthYearTextColor = Colors.white,
     this.monthYearButtonBackgroundColor = Colors.grey,
     this.calendarEventSelectedColor = Colors.white,
@@ -88,6 +94,8 @@ class CalendarSlider extends StatefulWidget implements PreferredSizeWidget {
     this.weekDay = WeekDay.short,
     this.fullCalendarWeekDay = WeekDay.short,
     this.selectedDayPosition = SelectedDayPosition.center,
+    this.disabledTo,
+    this.disabledFrom,
   })  : assert(
           initialDate.difference(firstDate).inDays >= 0,
           'initialDate must be on or after firstDate',
@@ -179,13 +187,16 @@ class CalendarSliderState extends State<CalendarSlider>
               DateTime date = _dates[index];
               bool isSelected = _daySelectedIndex == index;
 
+              bool isDisabled = widget.disabledTo != null ? (date.isBefore(widget.disabledTo!)) : false;
+              isDisabled = !isDisabled && widget.disabledFrom != null ? (date.isAfter(widget.disabledFrom!)) : isDisabled;
+
               return Align(
                 alignment: Alignment.center,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 5.0, horizontal: 4.0),
                   child: GestureDetector(
-                    onTap: () => _goToActualDay(index),
+                    onTap: isDisabled ? null : () => _goToActualDay(index),
                     child: Container(
                       height: isSelected
                           ? widget.selectedTileHeight
@@ -193,9 +204,12 @@ class CalendarSliderState extends State<CalendarSlider>
                       width: isSelected ? selectedTileWidth : tileWidth,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12.0),
-                          color: isSelected
-                              ? widget.selectedTileBackgroundColor
-                              : widget.tileBackgroundColor,
+                          color: isDisabled
+                              ? widget.disabledTileBackgroundColor
+                              : (isSelected
+                                ? widget.selectedTileBackgroundColor
+                                : widget.tileBackgroundColor
+                              ),
                           boxShadow: [
                             widget.tileShadow ??
                                 BoxShadow(
