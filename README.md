@@ -28,16 +28,16 @@ import 'package:calendar_slider/calendar_slider.dart';
 
  SelectedDayPosition.center         |  SelectedDayPosition.Left      | SelectedDayPosition.Right
 :-------------------------:|:-------------------------:|:-------------------------:
-![](assets/position_centre.png) | ![](assets/position_left.png) | ![](assets/position_right.png)
+![](https://raw.githubusercontent.com/dhwanish-3/calendar_slider/main/assets/position_centre.png) | ![](https://raw.githubusercontent.com/dhwanish-3/calendar_slider/main/assets/position_left.png) | ![](https://raw.githubusercontent.com/dhwanish-3/calendar_slider/main/assets/position_right.png)
 
  FullCalendarScroll.vertical         |  FullCalendarScroll.horizontal
 :-------------------------:|:-------------------------:
-![](assets/full_calendar_vertical.jpg) | ![](assets/full_calendar_horizontal.jpg)
+![](https://raw.githubusercontent.com/dhwanish-3/calendar_slider/main/assets/full_calendar_vertical.jpg) | ![](https://raw.githubusercontent.com/dhwanish-3/calendar_slider/main/assets/full_calendar_horizontal.jpg)
 
 
 ### Demo
 
-![Demo](assets/demo.gif)
+![Demo](https://raw.githubusercontent.com/dhwanish-3/calendar_slider/main/assets/demo.gif)
 
 # How to use?
 
