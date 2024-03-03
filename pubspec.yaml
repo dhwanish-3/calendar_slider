@@ -1,6 +1,6 @@
 name: calendar_slider
 description: Calendar Slider is a Flutter package that provides a sliding calendar widget. It is highly customizable and has a full calendar view.
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/dhwanish-3/calendar_slider/
 
 environment:
