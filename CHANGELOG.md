@@ -20,3 +20,7 @@
 * Many other color customization
 * Better example project with two demos
 * readme with proper documentation and visual representation
+
+## 0.0.4
+* disableTo/From added to disable past dates
+* disabled dates have disabledTileBackgroundColor
