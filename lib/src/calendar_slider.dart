@@ -281,7 +281,11 @@ class CalendarSliderState extends State<CalendarSlider>
             }),
       );
     }
-
+    String fmtTime = DateFormat.yMMMM(Locale(_locale).toString()).format(_selectedDate!);
+    try {
+      fmtTime = '${DateFormat.yMMMM(Locale(_locale).toString()).format(_selectedDate!).split(' ')[0].substring(
+          0, 3)}  ${DateFormat.yMMMM(Locale(_locale).toString()).format(_selectedDate!).split(' ')[1]}';
+    } catch (e) {}
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 180 - (widget.fullCalendar! ? 0 : widget.selectedTileHeight),
@@ -322,7 +326,7 @@ class CalendarSliderState extends State<CalendarSlider>
                                         widget.monthYearButtonBackgroundColor,
                                   ),
                                   child: Text(
-                                    ('${DateFormat.yMMMM(Locale(_locale).toString()).format(_selectedDate!).split(' ')[0].substring(0, 3)}  ${DateFormat.yMMMM(Locale(_locale).toString()).format(_selectedDate!).split(' ')[1]}'),
+                                    fmtTime,
                                     style: TextStyle(
                                       overflow: TextOverflow.clip,
                                       fontSize: 18.0,
