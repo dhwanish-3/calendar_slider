@@ -445,7 +445,7 @@ class CalendarSliderState extends State<CalendarSlider>
   }
 
   _goToActualDay(int index) {
-    _moveToDayIndex(index);
+    if (index < _dates.length - 2 && index > 1) _moveToDayIndex(index);
     setState(() {
       _daySelectedIndex = index;
       _selectedDate = _dates[index];
