@@ -304,9 +304,8 @@ class _FullCalendarState extends State<FullCalendar> {
 
   Widget month(List dates, double width, String? locale, WeekDay? weekday) {
     DateTime first = dates.first;
-    while (DateFormat("E").format(dates.first) != "Mon") {
+    while (dates.first.weekday != DateTime.monday) {
       dates.add(dates.first.subtract(const Duration(days: 1)));
-
       dates.sort();
     }
 

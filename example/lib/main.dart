@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:calendar_slider/calendar_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,6 +18,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('en'), // 英文
+        Locale('zh'), // 中文
+      ],
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,
@@ -67,7 +77,7 @@ class _ExamplePageState extends State<ExamplePage> {
         tileShadow: BoxShadow(
           color: Colors.black.withOpacity(1),
         ),
-        locale: 'en',
+        locale: Localizations.localeOf(context).languageCode,
         initialDate: DateTime.now(),
         firstDate: DateTime.now().subtract(const Duration(days: 100)),
         lastDate: DateTime.now().add(const Duration(days: 100)),
