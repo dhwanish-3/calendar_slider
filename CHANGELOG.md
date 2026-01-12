@@ -24,3 +24,8 @@
 ## 0.0.4
 * disableTo/From added to disable past dates
 * disabled dates have disabledTileBackgroundColor
+
+## 0.0.5
+* Bugfix: Fixed the month calculation dead loop problem
+* Bugfix: Fixed display issues except English
+* Bugfix: Boundary data removes scrolling effect
